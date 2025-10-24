@@ -1,4 +1,4 @@
-# Estudo CRUD SAEP
+# Estudo CRUD
 
 ## 📖 Sobre o Projeto
 
