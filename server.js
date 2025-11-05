@@ -1,12 +1,38 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const pool = require('./db');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// CREATE
+// 🔹 Rota para o index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 🔹 Rota manual para o script.js
+app.get('/script.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'script.js'));
+});
+
+// 🔹 Rota manual para o style.css (caso tenha)
+app.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'style.css'));
+});
+
+// 🔹 REST: listar usuários
+app.get('/usuarios', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM usuarios ORDER BY id ASC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// 🔹 CREATE
 app.post('/usuarios', async (req, res) => {
   const { nome, email, idade } = req.body;
   try {
@@ -20,17 +46,7 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-// READ
-app.get('/usuarios', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM usuarios ORDER BY id ASC');
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
-
-// UPDATE
+// 🔹 UPDATE
 app.put('/usuarios/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, email, idade } = req.body;
@@ -45,7 +61,7 @@ app.put('/usuarios/:id', async (req, res) => {
   }
 });
 
-// DELETE
+// 🔹 DELETE
 app.delete('/usuarios/:id', async (req, res) => {
   const { id } = req.params;
   try {
