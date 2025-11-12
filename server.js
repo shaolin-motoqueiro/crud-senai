@@ -12,6 +12,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+//rota para teste dos parametros
+app.get('/parametros/:id', (req, res) => {
+  res.send(`<h1>O parametro passado foi: ${req.params.id}</h1>`);
+});
+
 // 🔹 Rota manual para o script.js
 app.get('/script.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'script.js'));
